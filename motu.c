@@ -644,6 +644,22 @@ static int start_usb_playback(struct motu_avb *ua)
 	if (test_bit(DISCONNECTED, &ua->states))
 		return -ENODEV;
 
+	clear_bit(USB_PLAYBACK_RUNNING, &ua->states);
+
+	kill_stream_urbs(&ua->playback);
+	tasklet_kill(&ua->playback_tasklet);
+
+	if (vendor)
+	{
+		disable_iso_interface(ua, INTF_VENDOR_OUT);
+	}
+	else
+	{
+		disable_iso_interface(ua, INTF_PLAYBACK);
+	}
+	if (err < 0)
+		return err;
+
 	clear_bit(PLAYBACK_URB_COMPLETED, &ua->states);
 	ua->playback.urbs[0]->urb.complete =
 		first_playback_urb_complete;
@@ -654,12 +670,6 @@ static int start_usb_playback(struct motu_avb *ua)
 	ua->rate_feedback_start = 0;
 	ua->rate_feedback_count = 0;
 	spin_unlock_irq(&ua->lock);
-
-	if (test_bit(USB_PLAYBACK_RUNNING, &ua->states))
-		return 0;
-
-	kill_stream_urbs(&ua->playback);
-	tasklet_kill(&ua->playback_tasklet);
 
 	if (vendor)
 	{
