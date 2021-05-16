@@ -17,6 +17,9 @@ clean:
 show:
 	@echo $(KDIR)
 
+HEADER_FILE_USBAUDIO := $(KDIRS)/sound/usb/usbaudio.h
+HEADER_FILE_MIDI := $(KDIRS)/sound/usb/midi.h
 copy_h_files:
-	cp -v $(KDIRS)/sound/usb/usbaudio.h $(CURDIR)
-	cp -v $(KDIRS)/sound/usb/midi.h $(CURDIR)
+	@echo "Copying required header files from kernel sources..."
+	@if [ -f $(HEADER_FILE_USBAUDIO) ] ; then cp -v $(HEADER_FILE_USBAUDIO) $(CURDIR) ; else echo "Could not locate required header file from kernel sources: $(HEADER_FILE_USBAUDIO)" ; fi
+	@if [ -f $(HEADER_FILE_MIDI) ] ; then cp -v $(HEADER_FILE_MIDI) $(CURDIR) ; else echo "Could not locate required header file from kernel sources: $(HEADER_FILE_MIDI)" ; fi
