@@ -4,6 +4,8 @@ obj-m += motu.o
 KDIR ?= "/lib/modules/$(shell uname -r)/build"
 KDIRS ?= "/lib/modules/$(shell uname -r)/source"
 
+.PHONY: copy_h_files
+
 all: copy_h_files
 	$(MAKE) -C "$(KDIR)" M="$(CURDIR)" modules
 
