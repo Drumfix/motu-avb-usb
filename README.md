@@ -9,11 +9,13 @@ midi: set 1 for devices that have a midi port, 0 for the ones that don't
 vendor: 0 = use class compliant mode (24 channels in/out), 1 = vendor mode (64/32/24)
 
 ## Build
-Get the kernel source of your running kernel
+Install the kernel source of your running kernel.
 
-Copy the files \<kernel-src\>/sound/usb/usbaudio.h and \<kernel-src\>/sound/usb/midi.h from the kernel source over the files provided in this directory.
+The makefile expects the kernel source to be in /lib/modules/<kernel-version>/source.
+	
+If that is not the case set the environment variable KDIRS to point to the location of your kernel source.
 
-Make sure your kernel headers are install, then
+Then execute
 
     make 
     sudo make install
