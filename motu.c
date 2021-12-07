@@ -1465,7 +1465,7 @@ static const struct usb_device_id motu_avb_ids[] = {
 MODULE_DEVICE_TABLE(usb, motu_avb_ids);
 
 static struct usb_driver motu_avb_driver = {
-	.name = "snd-motu-avb",
+	.name = "motu",
 	.id_table = motu_avb_ids,
 	.probe = motu_avb_probe,
 	.disconnect = motu_avb_disconnect,
