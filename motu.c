@@ -584,7 +584,7 @@ static void stop_usb_capture(struct motu_avb *ua)
 
 static int start_usb_capture(struct motu_avb *ua)
 {
-	int err;
+	int err = 0;
 
 	if (test_bit(DISCONNECTED, &ua->states))
 		return -ENODEV;
