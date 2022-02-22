@@ -166,24 +166,33 @@ static void set_samplerate(struct motu_avb *ua)
         int err;
 /*        int count = 100; */
 
+        void *data_buf = NULL;
+
 	if (ua->samplerate_is_set)
 		return;
 
-        ua->samplerate_is_set = true;
-
         data = cpu_to_le32(ua->rate);
+
+        data_buf = kmemdup(&data, sizeof(data), GFP_KERNEL);
+	if (!data_buf)
+		return;      
+
 	err = usb_control_msg(ua->dev, usb_sndctrlpipe(ua->dev, 0), UAC2_CS_CUR,
 			      USB_TYPE_CLASS | USB_RECIP_INTERFACE | USB_DIR_OUT,
 			      UAC2_CS_CONTROL_SAM_FREQ << 8,
 			      0 | (INTCLOCK << 8),
-			      &data, sizeof(data),
+			      data_buf, sizeof(data),
 			      USB_CTRL_SET_TIMEOUT);
 	if (err < 0)
 		dev_warn(&ua->dev->dev,
 				 "%s(): cannot set samplerate %d\n",
 				   __func__,  ua->rate);
 
-        dev_warn(&ua->dev->dev, "Motu driver 0.1\n");
+        ua->samplerate_is_set = true;
+
+        dev_warn(&ua->dev->dev, "Motu driver 0.2\n");
+
+        kfree(data_buf);
 
         msleep(500);
 /*
